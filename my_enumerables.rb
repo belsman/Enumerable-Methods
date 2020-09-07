@@ -8,3 +8,5 @@ module Enumerable
     self
   end
 end
+
+p [1,2,3].my_each
