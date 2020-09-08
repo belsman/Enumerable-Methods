@@ -56,4 +56,17 @@ module Enumerable
 
     size
   end
+
+  def my_map
+    return enum_for(__method__) unless block_given?
+
+    result = []
+    my_each_with_index { |_, idx| result << el if yield(el) }
+    result
+  end
 end
+
+a = [ "a", "b", "c", "d" ]
+a.collect {|x| x + "!"}           #=> ["a!", "b!", "c!", "d!"]
+a.map.with_index {|x, i| x * i}   #=> ["", "b", "cc", "ddd"]
+a                                 #=> ["a", "b", "c", "d"]
