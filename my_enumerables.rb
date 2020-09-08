@@ -33,4 +33,23 @@ module Enumerable
     end
     true
   end
+
+  def my_any?
+    my_each do |el|
+      if block_given?
+        return true if yield(el)
+      else
+        return true if el
+      end
+    end
+    false
+  end
 end
+
+
+#p %w[ant bear cat].my_any? { |word| word.length >= 3 } #=> true
+#p %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> true
+p %w[ant bear cat].any?                    #=> false
+#p [nil, true, 99].my_any?                    #=> true
+#p [nil, true, 99].my_any?                              #=> true
+#p [].my_any?                                           #=> false
