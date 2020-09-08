@@ -22,4 +22,18 @@ module Enumerable
     my_each { |el| result << el if yield(el) }
     result
   end
+
+  def my_all
+    return enum_for(__method__) unless block_given?
+
+    arr = to_a
+    arr.my_each do |el|
+        if yield(el) === el
+          return true
+        end
+    end
+  end
 end
+
+puts %w[ant bear cat].my_all { |word| word.length >= 3 } #=> true
+%w[ant bear cat].all? { |word| word.length >= 4 } #=> false
