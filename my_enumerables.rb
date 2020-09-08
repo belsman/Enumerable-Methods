@@ -23,17 +23,14 @@ module Enumerable
     result
   end
 
-  def my_all
-    return enum_for(__method__) unless block_given?
-
-    arr = to_a
-    arr.my_each do |el|
-        if yield(el) === el
-          return true
-        end
+  def my_all?
+    my_each do |el|
+      if block_given?
+        return false unless yield(el)
+      else
+        return false unless el
+      end
     end
+    true
   end
 end
-
-puts %w[ant bear cat].my_all { |word| word.length >= 3 } #=> true
-%w[ant bear cat].all? { |word| word.length >= 4 } #=> false
