@@ -44,12 +44,8 @@ module Enumerable
     end
     false
   end
+
+  def my_none?
+    !my_any? { |el| yield(el) }
+  end
 end
-
-
-#p %w[ant bear cat].my_any? { |word| word.length >= 3 } #=> true
-#p %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> true
-p %w[ant bear cat].any?                    #=> false
-#p [nil, true, 99].my_any?                    #=> true
-#p [nil, true, 99].my_any?                              #=> true
-#p [].my_any?                                           #=> false
