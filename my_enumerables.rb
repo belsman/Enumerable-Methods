@@ -6,7 +6,7 @@ module Enumerable
     size.times { |idx| yield(arr[idx]) }
     self
   end
-  
+
   def my_each_with_index
     return enum_for(__method__) unless block_given?
 
@@ -47,5 +47,13 @@ module Enumerable
 
   def my_none?
     !my_any? { |el| yield(el) }
+  end
+
+  def my_count(item = nil)
+    return my_select { |el| el == item }.size if item
+
+    return my_select { |el| yield(el) }.size if block_given?
+
+    size
   end
 end
