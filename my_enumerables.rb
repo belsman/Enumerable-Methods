@@ -10,9 +10,8 @@ module Enumerable
   def my_each_with_index
     return enum_for(__method__) unless block_given?
 
-    index = 
-    
-    size.times { |idx| yield(to_a[idx]) }
+    arr = to_a
+    size.times { |idx| yield(arr[idx], idx) }
     self
   end
 
