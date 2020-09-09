@@ -38,8 +38,8 @@ module Enumerable
     my_each do |el|
       if block_given?
         return true if yield(el)
-      else
-        return true if el
+      elsif el
+        return true
       end
     end
     false
