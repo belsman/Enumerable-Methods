@@ -57,15 +57,17 @@ module Enumerable
     size
   end
 
-  def my_map(maping_proc)
-    #return enum_for(__method__) unless block_given?
+  def my_map(maping_proc = nil)
+    return enum_for(__method__) if maping_proc.nil? && !block_given?
 
     result = []
-    my_each_with_index { |el, idx| result[idx] = maping_proc.call(el, idx) }
+    my_each_with_index do |el, idx|
+      result[idx] = !maping_proc.nil? ? maping_proc.call(el, idx) : yield(el, idx)
+    end
     result
   end
 
-  def my_inject(memo=0)
+  def my_inject(memo = 0)
     return enum_for(__method__) unless block_given?
 
     result = memo
@@ -75,9 +77,5 @@ module Enumerable
 end
 
 def multiply_els(arr)
-  return arr.my_inject(1) { |product, n| product * n }
+  arr.my_inject(1) { |product, n| product * n }
 end
-
-my_proc = Proc.new { |elem, i| "#{elem} -- #{i}" }
-
-p [1, 2, 3, 4].my_map(my_proc) # ['1 -- 0', '2 -- 1', '3 -- 2', '4 -- 3']
