@@ -81,13 +81,40 @@ module Enumerable
     result
   end
 
-  def my_inject(memo = 0)
-    return enum_for(__method__) unless block_given?
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/MethodLength
+  def my_inject(initial = nil, sym = nil)
+    result = to_a[0].is_a?(String) ? '' : 0
+    operator = nil
 
-    result = memo
-    my_each { |el| result = yield(result, el) }
+    operations = {
+      :+ => proc { |accumulator, n| accumulator + n },
+      :* => proc { |accumulator, n| accumulator * n },
+      :/ => proc { |accumulator, n| accumulator / n },
+      :- => proc { |accumulator, n| accumulator - n }
+    }
+
+    if initial && sym
+      result = initial
+      operator = sym
+    elsif initial && !sym && !block_given?
+      operator = initial
+    elsif initial && block_given?
+      result = initial
+    end
+
+    if operator
+      my_each { |el| result = operations[operator].call(result, el) }
+    else
+      my_each { |el| result = yield(result, el) }
+    end
+
     result
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/MethodLength
 end
 
 def multiply_els(arr)
