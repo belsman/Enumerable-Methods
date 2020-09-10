@@ -23,7 +23,7 @@ module Enumerable
     result
   end
 
-  def my_all?(pattarn_or_cls=nil)
+  def my_all?(pattarn_or_cls = nil)
     if pattarn_or_cls
       my_each do |el|
         if pattarn_or_cls.is_a?(Regexp)
@@ -31,7 +31,7 @@ module Enumerable
         elsif pattarn_or_cls.is_a?(Object)
           return false unless el.is_a?(pattarn_or_cls)
         end
-      end 
+      end
     else
       my_each do |el|
         if block_given?
@@ -44,7 +44,7 @@ module Enumerable
     true
   end
 
-  def my_any?(pattarn_or_cls=nil)
+  def my_any?(pattarn_or_cls = nil)
     if pattarn_or_cls
       my_each do |el|
         if pattarn_or_cls.is_a?(Regexp)
@@ -52,7 +52,7 @@ module Enumerable
         elsif pattarn_or_cls.is_a?(Object)
           return true if el.is_a?(pattarn_or_cls)
         end
-      end 
+      end
     else
       my_each do |el|
         if block_given?
@@ -65,8 +65,8 @@ module Enumerable
     false
   end
 
-  def my_none?(pattarn_or_cls=nil)
-    unless block_given?
+  def my_none?(pattarn_or_cls = nil)
+    if !block_given?
       !my_any?(pattarn_or_cls) { |el| el }
     else
       !my_any?(pattarn_or_cls) { |el| yield(el) }
@@ -103,12 +103,3 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |product, n| product * n }
 end
-
-p %w{ant bear cat}.my_none? { |word| word.length == 5 } #=> true
-p %w{ant bear cat}.my_none? { |word| word.length >= 4 } #=> false
-p %w{ant bear cat}.my_none?(/d/)                        #=> true
-p [1, 3.14, 42].my_none?(Float)                         #=> false
-p [].my_none?                                           #=> true
-p [nil].my_none?                                        #=> true
-p [nil, false].my_none?                                 #=> true
-p [nil, false, true].my_none?                           #=> false
