@@ -84,7 +84,7 @@ module Enumerable
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/MethodLength
-  def my_inject(initial = nil, sym = nil)
+  def my_inject(memo = nil, sym = nil)
     result = to_a[0].is_a?(String) ? '' : 0
     operator = nil
 
@@ -95,13 +95,13 @@ module Enumerable
       :- => proc { |accumulator, n| accumulator - n }
     }
 
-    if initial && sym
-      result = initial
+    if memo && sym
+      result = memo
       operator = sym
-    elsif initial && !sym && !block_given?
-      operator = initial
-    elsif initial && block_given?
-      result = initial
+    elsif memo && !sym && !block_given?
+      operator = memo
+    elsif memo && block_given?
+      result = memo
     end
 
     if operator
