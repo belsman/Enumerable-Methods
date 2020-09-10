@@ -23,43 +23,31 @@ module Enumerable
     result
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def my_all?(pattarn_or_cls = nil)
-    if pattarn_or_cls
-      my_each do |el|
-        if pattarn_or_cls.is_a?(Regexp)
-          return false unless el =~ pattarn_or_cls
-        elsif pattarn_or_cls.is_a?(Object)
-          return false unless el.is_a?(pattarn_or_cls)
-        end
-      end
-    else
-      my_each do |el|
-        if block_given?
-          return false unless yield(el)
-        else
-          return false unless el
-        end
+    my_each do |el|
+      if pattarn_or_cls
+        return false if pattarn_or_cls.is_a?(Regexp) && el !~ pattarn_or_cls
+        return false if !pattarn_or_cls.is_a?(Regexp) && pattarn_or_cls.is_a?(Object) && !el.is_a?(pattarn_or_cls)
+      elsif block_given?
+        return false unless yield(el)
+      else
+        return false unless el
       end
     end
     true
   end
 
   def my_any?(pattarn_or_cls = nil)
-    if pattarn_or_cls
-      my_each do |el|
-        if pattarn_or_cls.is_a?(Regexp)
-          return true if el =~ pattarn_or_cls
-        elsif pattarn_or_cls.is_a?(Object)
-          return true if el.is_a?(pattarn_or_cls)
-        end
-      end
-    else
-      my_each do |el|
-        if block_given?
-          return true if yield(el)
-        elsif el
-          return true
-        end
+    my_each do |el|
+      if pattarn_or_cls
+        return true if pattarn_or_cls.is_a?(Regexp) && el =~ pattarn_or_cls
+        return true if !pattarn_or_cls.is_a?(Regexp) && pattarn_or_cls.is_a?(Object) && el.is_a?(pattarn_or_cls)
+      elsif block_given?
+        return true if yield(el)
+      elsif el
+        return true
       end
     end
     false
@@ -72,6 +60,8 @@ module Enumerable
       !my_any?(pattarn_or_cls) { |el| yield(el) }
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def my_count(item = nil)
     return my_select { |el| el == item }.size if item
