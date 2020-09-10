@@ -4,7 +4,7 @@
 
 ## Short demo of the code
 
-![screenshot](images/screenshot.png)
+![screenshot](./images/screenshot.png)
 
 > We created the most used Enumerable methods with an extensive use of the Ruby methods, data types, loops and conditionals.
 
