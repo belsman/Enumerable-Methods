@@ -94,7 +94,6 @@ module Enumerable
 
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
-  # rubocop:disable Metrics/MethodLength
   def my_inject(memo = nil, sym = nil)
     result = to_a[0]
     operator = nil
@@ -115,17 +114,12 @@ module Enumerable
       result = memo
     end
 
-    if operator
-      my_each { |el| result = operations[operator].call(result, el) }
-    else
-      my_each { |el| result = yield(result, el) }
-    end
+    my_each { |el| result = operator ? operations[operator].call(result, el) : yield(result, el) }
 
     result
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
-  # rubocop:enable Metrics/MethodLength
 end
 
 def multiply_els(arr)
