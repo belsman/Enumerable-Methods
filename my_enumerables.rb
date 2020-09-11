@@ -29,7 +29,13 @@ module Enumerable
     my_each do |el|
       if pattarn_or_cls
         return false if pattarn_or_cls.is_a?(Regexp) && el !~ pattarn_or_cls
-        return false if !pattarn_or_cls.is_a?(Regexp) && pattarn_or_cls.is_a?(Object) && !el.is_a?(pattarn_or_cls)
+
+        begin
+          return false if !pattarn_or_cls.is_a?(Regexp) && pattarn_or_cls.is_a?(Object) && !el.is_a?(pattarn_or_cls)
+        rescue TypeError
+          return false unless el == pattarn_or_cls
+        end
+
       elsif block_given?
         return false unless yield(el)
       else
@@ -43,7 +49,12 @@ module Enumerable
     my_each do |el|
       if pattarn_or_cls
         return true if pattarn_or_cls.is_a?(Regexp) && el =~ pattarn_or_cls
-        return true if !pattarn_or_cls.is_a?(Regexp) && pattarn_or_cls.is_a?(Object) && el.is_a?(pattarn_or_cls)
+
+        begin
+          return true if !pattarn_or_cls.is_a?(Regexp) && pattarn_or_cls.is_a?(Object) && el.is_a?(pattarn_or_cls)
+        rescue TypeError
+          return true if el == pattarn_or_cls
+        end
       elsif block_given?
         return true if yield(el)
       elsif el
@@ -120,3 +131,6 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |product, n| product * n }
 end
+
+range = 1..5
+p range.my_inject(:+)
