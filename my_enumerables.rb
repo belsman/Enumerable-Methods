@@ -131,6 +131,3 @@ end
 def multiply_els(arr)
   arr.my_inject(1) { |product, n| product * n }
 end
-
-range = 1..5
-p range.my_inject(:+)

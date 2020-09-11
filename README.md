@@ -1,6 +1,6 @@
 # Enumerable methods
 
-> For this project, we created two **enumerable methods** used by the Enumerable module in Ruby.
+> For this project, we created custom **enumerable methods** used by the Enumerable module in Ruby.
 
 ## Short demo of the code
 
