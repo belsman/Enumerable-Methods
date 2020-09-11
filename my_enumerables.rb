@@ -96,7 +96,7 @@ module Enumerable
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/MethodLength
   def my_inject(memo = nil, sym = nil)
-    result = to_a[0].is_a?(String) ? '' : 0
+    result = to_a[0]
     operator = nil
 
     operations = {
