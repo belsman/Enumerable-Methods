@@ -97,6 +97,7 @@ module Enumerable
   # rubocop:disable Metrics/MethodLength
   def my_inject(memo = nil, sym = nil)
     result = to_a[0]
+    initial = nil
     operator = nil
 
     operations = {
@@ -108,15 +109,17 @@ module Enumerable
 
     if memo && sym
       result = memo
+      initial = memo
       operator = sym
     elsif memo && !sym && !block_given?
       operator = memo
     elsif memo && block_given?
       result = memo
+      initial = memo
     end
 
     my_each_with_index do |el, idx|
-      next if idx.zero?
+      next if idx.zero? && !initial
 
       result = operator ? operations[operator].call(result, el) : yield(result, el)
     end
