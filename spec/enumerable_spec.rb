@@ -258,4 +258,47 @@ describe Enumerable do
       expect(int_arry).to be_eql(expected_array)
     end
   end
+
+  describe '#my_inject' do
+    it 'works with an addition symbol' do
+      expect(int_arry.my_inject(:+)).to be_eql(15)
+    end
+
+    it 'works with an subtraction symbol' do
+      expect(int_arry.my_inject(:-)).to be_eql(-13)
+    end
+
+    it 'works with an multiplication symbol' do
+      expect(int_arry.my_inject(:*)).to be_eql(120)
+    end
+
+    it 'works with an division symbol' do
+      expect(int_arry.my_inject(:/)).to be_eql(0)
+    end
+
+    it 'works with an memo (initial value) and symbol' do
+      expect(int_arry.my_inject(4, :*)).to be_eql(480)
+    end
+
+    it 'works with an memo (initial value) and block' do
+      expect(int_arry.my_inject(4) { |product, n| product * n }).to be_eql(480)
+    end
+
+    it 'works when passed a block' do
+      longest = %w[cat sheep bear].my_inject do |memo, word|
+        memo.length > word.length ? memo : word
+      end
+      expect(longest).to be_eql('sheep')
+    end
+
+    it 'works with ranges and symbols' do
+      the_sum = (1..5).my_inject(:+)
+      expect(the_sum).to be_eql(15)
+    end
+
+    it 'works with ranges and blocks' do
+      the_sum = (1..5).my_inject { |sum_, n| sum_ + n }
+      expect(the_sum).to be_eql(15)
+    end
+  end
 end
