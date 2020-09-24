@@ -2,6 +2,8 @@ require './my_enumerables'
 
 describe Enumerable do
   let(:int_arry) { [1, 2, 3, 4, 5] }
+  let(:string_arry) { %w[cat dog yam egg] }
+  let(:mix_arry) { [100, nil, false, 'bake', 'hen'] }
   let(:test_hash) { { a: 1, b: 2, c: 3 } }
   let(:result) { [] }
 
@@ -25,7 +27,7 @@ describe Enumerable do
     end
   end
 
-  describe 'my_each_with_index' do
+  describe '#my_each_with_index' do
     it 'iterate an array passing each element and its index to a block.' do
       expected_result_with_index = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]]
       int_arry.my_each_with_index { |e, i| result << [i, e] }
@@ -75,6 +77,48 @@ describe Enumerable do
 
     it 'returns an <Enumerable> class. If no block is passed.' do
       expect(int_arry.my_select).to be_an Enumerable
+    end
+  end
+
+  describe '#my_all?' do
+    it 'return true if all elements passed to block is truthy' do
+      boolean_result = int_arry.my_all? { |e| e > 0 }
+      expect(boolean_result).to be true
+    end
+
+    it 'return false if any element passed to block is false' do
+      boolean_result = int_arry.my_all? { |e| e > 1 }
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true if all elements is true without a block' do
+      boolean_result = string_arry.my_all?
+      expect(boolean_result).to be true
+    end
+
+    it 'returns false if any element is false without a block' do
+      boolean_result = mix_arry.my_all?
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true if all elements are of given type' do
+      boolean_result = string_arry.my_all?(String)
+      expect(boolean_result).to be true
+    end
+
+    it 'returns false if any element is not of given type' do
+      boolean_result = mix_arry.my_all?(Numeric)
+      expect(boolean_result).to be false
+    end
+
+    it 'returns false if any element doesn\'t match a pattern' do
+      boolean_result = %w[ant bear cat].my_all?(/t/)
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true when called on an empty array' do
+      boolean_result = [].my_all?
+      expect(boolean_result).to be true
     end
   end
 end
