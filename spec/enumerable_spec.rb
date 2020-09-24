@@ -164,4 +164,46 @@ describe Enumerable do
       expect(boolean_result).to be false
     end
   end
+
+  describe '#my_none?' do
+    it 'return true if any elements passed to block is false' do
+      boolean_result = string_arry.my_none? { |e| e.length == 6 }
+      expect(boolean_result).to be true
+    end
+
+    it 'return false if any element passed to block is true' do
+      boolean_result = string_arry.my_none? { |e| e == 'egg' }
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true if all element is falsy without a block' do
+      boolean_result = false_arry.my_none?
+      expect(boolean_result).to be true
+    end
+
+    it 'returns false if any element is truthy without a block' do
+      boolean_result = mix_arry.my_none?
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true if none of the element is of given type' do
+      boolean_result = int_arry.my_none?(String)
+      expect(boolean_result).to be true
+    end
+
+    it 'returns false if any element is of given type' do
+      boolean_result = mix_arry.my_none?(String)
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true if all elements do not match a pattern' do
+      boolean_result = %w[fish bear hen].my_none?(/t/)
+      expect(boolean_result).to be true
+    end
+
+    it 'returns true when called on an empty array' do
+      boolean_result = [].my_none?
+      expect(boolean_result).to be true
+    end
+  end
 end
