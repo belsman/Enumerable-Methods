@@ -8,6 +8,9 @@ describe Enumerable do
   let(:test_hash) { { a: 1, b: 2, c: 3 } }
   let(:result) { [] }
 
+  let(:test_proc) { proc { |e| "value is #{e}" } }
+  let(:test_proc2) { proc { |e| e**2 } }
+
   describe '#my_each' do
     it 'returns same array, unmodified when passed a block.' do
       result = int_arry.my_each { |e| e * 3 }
@@ -218,6 +221,41 @@ describe Enumerable do
 
     it 'returns the count based on the predicate of a block' do
       expect(int_arry.my_count { |e| e > 2 }).to be_eql(3)
+    end
+  end
+
+  describe '#my_map' do
+    it 'returns <Enumerable> class if no proc or block given' do
+      expect(int_arry.my_map).to be_an Enumerable
+    end
+
+    it 'returns new array when proc is passed' do
+      expect(int_arry.my_map(test_proc)).to be_an Array
+    end
+
+    it 'returns new array when block is passed' do
+      expect(int_arry.my_map { |e| e }).to be_an Array
+    end
+
+    it 'returns a newly transformed array when passed a proc' do
+      expected_array = ['value is 1', 'value is 2', 'value is 3', 'value is 4', 'value is 5']
+      expect(int_arry.my_map(test_proc)).to be_eql(expected_array)
+    end
+
+    it 'returns a newly transformed array when passed a block' do
+      expected_array = ['value is 1', 'value is 2', 'value is 3', 'value is 4', 'value is 5']
+      expect(int_arry.my_map { |e| "value is #{e}" }).to be_eql(expected_array)
+    end
+
+    it 'uses proc if proc and block are passed' do
+      expected_array = [1, 4, 9, 16, 25]
+      expect(int_arry.my_map(test_proc2) { |e| "value is #{e}" }).to be_eql(expected_array)
+    end
+
+    it 'does not change the caller' do
+      expected_array = [1, 2, 3, 4, 5]
+      int_arry.my_map(test_proc2)
+      expect(int_arry).to be_eql(expected_array)
     end
   end
 end
