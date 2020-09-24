@@ -3,6 +3,7 @@ require './my_enumerables'
 describe Enumerable do
   let(:int_arry) { [1, 2, 3, 4, 5] }
   let(:string_arry) { %w[cat dog yam egg] }
+  let(:false_arry) { [nil, false, nil] }
   let(:mix_arry) { [100, nil, false, 'bake', 'hen'] }
   let(:test_hash) { { a: 1, b: 2, c: 3 } }
   let(:result) { [] }
@@ -119,6 +120,48 @@ describe Enumerable do
     it 'returns true when called on an empty array' do
       boolean_result = [].my_all?
       expect(boolean_result).to be true
+    end
+  end
+
+  describe '#my_any?' do
+    it 'return true if any elements passed to block is truthy' do
+      boolean_result = int_arry.my_any? { |e| e > 3 }
+      expect(boolean_result).to be true
+    end
+
+    it 'return false if all element passed to block is false' do
+      boolean_result = int_arry.my_any? { |e| e > 5 }
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true if any element is true without a block' do
+      boolean_result = string_arry.my_any?
+      expect(boolean_result).to be true
+    end
+
+    it 'returns false if all elements are false without a block' do
+      boolean_result = false_arry.my_any?
+      expect(boolean_result).to be false
+    end
+
+    it 'returns true if any element is of given type' do
+      boolean_result = mix_arry.my_any?(String)
+      expect(boolean_result).to be true
+    end
+
+    it 'returns false if all elements are not of given type' do
+      boolean_result = int_arry.my_any?(String)
+      expect(boolean_result).to be false
+    end
+
+    it 'returns false if all elements do not match a pattern' do
+      boolean_result = %w[fish bear hen].my_any?(/t/)
+      expect(boolean_result).to be false
+    end
+
+    it 'returns false when called on an empty array' do
+      boolean_result = [].my_any?
+      expect(boolean_result).to be false
     end
   end
 end
