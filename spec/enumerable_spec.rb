@@ -206,4 +206,18 @@ describe Enumerable do
       expect(boolean_result).to be true
     end
   end
+
+  describe '#my_count' do
+    it 'returns the size of array if no block is given' do
+      expect(int_arry.my_count).to be_eql(5)
+    end
+
+    it 'returns the count of argument passed in an array' do
+      expect(int_arry.my_count(5)).to be_eql(1)
+    end
+
+    it 'returns the count based on the predicate of a block' do
+      expect(int_arry.my_count { |e| e > 2 }).to be_eql(3)
+    end
+  end
 end
